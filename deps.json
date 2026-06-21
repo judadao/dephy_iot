@@ -4,7 +4,7 @@
       "repo": "git@github.com:judadao/dephy.git",
       "local": "../dephy",
       "path": "deps/dephy",
-      "version": "dephy-v0.1.4",
+      "version": "dephy-v0.1.6",
       "profile": "esp32",
       "module_path": "deps/dephy/boards/esp32"
     },

@@ -66,6 +66,12 @@ from that directory:
 ./scripts/build_zephyr.sh
 ```
 
+The first `sync_deps.sh` run initializes `deps/dephy/zephyrproject` and downloads
+the configured Zephyr modules. Later runs preserve that workspace and skip
+module downloads unless Dephy is forced with `DEPHY_FORCE_WEST_UPDATE=1`.
+Use `DEPHY_IOT_SKIP_INIT=1 ./scripts/sync_deps.sh` when you only want to update
+dependency checkouts and skip Dephy init entirely.
+
 The default board is read from `deps.json` and is currently
 `esp32_devkitc/esp32/procpu`.
 
