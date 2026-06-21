@@ -1,0 +1,22 @@
+{
+  "deps": {
+    "dephy": {
+      "repo": "git@github.com:judadao/dephy.git",
+      "local": "../dephy",
+      "path": "deps/dephy",
+      "tag": "dephy-v0.1.0",
+      "module_path": "deps/dephy/boards/esp32"
+    },
+    "mqtt_min_broker": {
+      "repo": "git@github.com:judadao/mqtt_min_broker.git",
+      "local": "../mqtt_min_broker",
+      "path": "deps/mqtt_min_broker",
+      "tag": "minmqtt-v0.1.18",
+      "module_path": "deps/mqtt_min_broker"
+    }
+  },
+  "build": {
+    "board": "esp32_devkitc/esp32/procpu",
+    "dephy_workspace": "../dephy/zephyrproject"
+  }
+}

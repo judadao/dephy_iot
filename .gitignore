@@ -1,0 +1,11 @@
+build/
+build_out/
+deps/
+*.o
+*.a
+*.so
+*.elf
+*.bin
+*.map
+.cache/
+

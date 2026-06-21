@@ -1,0 +1,53 @@
+CC      = gcc
+CFLAGS  = -Wall -Wextra -std=c11 -g -D_POSIX_C_SOURCE=200809L -Iinclude
+OUTDIR  = build_out
+LDFLAGS =
+
+ifdef MQTT
+CFLAGS += -DCONFIG_DEPHY_IOT_MQTT \
+          -DCONFIG_DEPHY_IOT_MQTT_MIN_BROKER \
+          -Ideps/mqtt_min_broker/include \
+          -Ideps/mqtt_min_broker
+MQTT_SRCS = deps/mqtt_min_broker/src/broker.c \
+            deps/mqtt_min_broker/src/client.c \
+            deps/mqtt_min_broker/src/packet.c \
+            deps/mqtt_min_broker/src/session.c \
+            deps/mqtt_min_broker/src/topic.c \
+            deps/mqtt_min_broker/platform/posix/platform_posix.c
+LDFLAGS += -lpthread
+endif
+
+ifdef MODBUS
+CFLAGS += -DCONFIG_DEPHY_IOT_MODBUS
+endif
+
+ifdef SNMP
+CFLAGS += -DCONFIG_DEPHY_IOT_SNMP
+endif
+
+SRCS = src/iot.c src/mqtt.c src/modbus.c src/snmp.c $(MQTT_SRCS)
+OBJS = $(SRCS:%.c=$(OUTDIR)/%.o)
+LIB  = $(OUTDIR)/libdephy_iot.a
+UNIT = $(OUTDIR)/unit_iot
+
+.PHONY: all clean test unit-tests
+
+all: $(LIB)
+
+$(OUTDIR):
+	mkdir -p $(OUTDIR)/src $(OUTDIR)/deps/mqtt_min_broker/src $(OUTDIR)/deps/mqtt_min_broker/platform/posix
+
+$(OUTDIR)/%.o: %.c | $(OUTDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIB): $(OBJS)
+	ar rcs $@ $(OBJS)
+
+unit-tests: $(LIB)
+	$(CC) $(CFLAGS) tests/unit_iot.c $(SRCS) -DCONFIG_DEPHY_IOT_MQTT -o $(UNIT) $(LDFLAGS)
+	$(UNIT)
+
+test: unit-tests
+
+clean:
+	rm -rf $(OUTDIR)

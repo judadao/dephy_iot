@@ -1,0 +1,5 @@
+mainmenu "Dephy IoT"
+
+source "Kconfig.zephyr"
+rsource "zephyr/Kconfig"
+

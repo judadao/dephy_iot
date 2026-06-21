@@ -1,0 +1,36 @@
+menuconfig DEPHY_IOT
+	bool "Dephy IoT protocol adapters"
+	default n
+	help
+	  Enable the Dephy IoT adapter module collection.
+
+if DEPHY_IOT
+
+config DEPHY_IOT_MQTT
+	bool "Enable MQTT adapter"
+	default n
+	imply MQTT_MIN_BROKER
+	help
+	  Enable the MQTT adapter. Actual MQTT broker support is provided by
+	  the mqtt_min_broker module when the application enables it.
+
+config DEPHY_IOT_MQTT_MIN_BROKER
+	bool "Back MQTT adapter with mqtt_min_broker"
+	depends on DEPHY_IOT_MQTT
+	default y
+	help
+	  Use the mqtt_min_broker dependency as the MQTT backend.
+
+config DEPHY_IOT_MODBUS
+	bool "Enable Modbus adapter"
+	default n
+	help
+	  Reserve and compile the Modbus adapter API.
+
+config DEPHY_IOT_SNMP
+	bool "Enable SNMP adapter"
+	default n
+	help
+	  Reserve and compile the SNMP adapter API.
+
+endif # DEPHY_IOT

@@ -1,0 +1,5 @@
+name: dephy_iot
+build:
+  cmake: zephyr
+  kconfig: zephyr/Kconfig
+
