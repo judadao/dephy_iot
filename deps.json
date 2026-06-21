@@ -4,19 +4,27 @@
       "repo": "git@github.com:judadao/dephy.git",
       "local": "../dephy",
       "path": "deps/dephy",
-      "tag": "dephy-v0.1.0",
+      "version": "dephy-v0.1.4",
+      "profile": "esp32",
       "module_path": "deps/dephy/boards/esp32"
     },
     "mqtt_min_broker": {
       "repo": "git@github.com:judadao/mqtt_min_broker.git",
       "local": "../mqtt_min_broker",
       "path": "deps/mqtt_min_broker",
-      "tag": "minmqtt-v0.1.18",
+      "version": "minmqtt-v0.1.18",
       "module_path": "deps/mqtt_min_broker"
+    },
+    "modbus_zephyr_esp32": {
+      "repo": "git@github.com:judadao/modbus_zephyr_esp32.git",
+      "local": "../modbus_zephyr_esp32",
+      "path": "deps/modbus_zephyr_esp32",
+      "optional": true,
+      "module_path": "deps/modbus_zephyr_esp32"
     }
   },
   "build": {
     "board": "esp32_devkitc/esp32/procpu",
-    "dephy_workspace": "../dephy/zephyrproject"
+    "dephy_workspace": "deps/dephy/zephyrproject"
   }
 }

@@ -6,7 +6,7 @@ This repository is intended to collect protocol modules behind one small public
 API while keeping each protocol independently enabled:
 
 - MQTT through `mqtt_min_broker`
-- Modbus, planned
+- Modbus through `modbus_zephyr_esp32`, planned
 - SNMP, planned
 
 It supports two build modes:
@@ -58,7 +58,8 @@ CONFIG_DEPHY_IOT_SNMP=n
 
 For Dephy-led builds, sync the pinned dependencies and build the sample app.
 Dependencies are materialized into `deps/`; build scripts consume dependency
-source, headers, and Zephyr CMake metadata from that directory:
+source, headers, Zephyr CMake metadata, and the Dephy-managed Zephyr workspace
+from that directory:
 
 ```bash
 ./scripts/sync_deps.sh
@@ -67,3 +68,17 @@ source, headers, and Zephyr CMake metadata from that directory:
 
 The default board is read from `deps.json` and is currently
 `esp32_devkitc/esp32/procpu`.
+
+`deps.json` separates the Dephy profile from the Zephyr target:
+
+- `deps.dephy.profile`: Dephy profile directory, currently `esp32`
+- `deps.dephy.module_path`: Zephyr module path, currently
+  `deps/dephy/boards/esp32`
+- `build.board`: Zephyr target passed to `west build`, currently
+  `esp32_devkitc/esp32/procpu`
+- `build.dephy_workspace`: local Zephyr workspace, currently
+  `deps/dephy/zephyrproject`
+
+`modbus_zephyr_esp32` is already declared as an optional dependency. Its remote
+repository is currently empty, so `scripts/build_zephyr.sh` skips it until it
+contains Zephyr module metadata such as `zephyr/module.yml`.

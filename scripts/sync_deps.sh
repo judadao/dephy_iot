@@ -19,7 +19,7 @@ jq -r '.deps | keys[]' "$DEPS_JSON" | while IFS= read -r name; do
     path=$(json_value ".deps.$name.path")
     local_path=$(json_value ".deps.$name.local")
     repo=$(json_value ".deps.$name.repo")
-    tag=$(json_value ".deps.$name.tag")
+    version=$(json_value ".deps.$name.version")
     dest="$ROOT_DIR/$path"
 
     if [ -n "$local_path" ] && [ -d "$ROOT_DIR/$local_path/.git" ]; then
@@ -29,8 +29,21 @@ jq -r '.deps | keys[]' "$DEPS_JSON" | while IFS= read -r name; do
         git clone --quiet "$repo" "$dest"
     fi
 
-    if [ -n "$tag" ]; then
-        (cd "$dest" && git fetch --quiet --tags && git checkout --quiet "$tag")
+    if [ -n "$version" ]; then
+        (cd "$dest" && git fetch --quiet --tags && git checkout --quiet "$version")
     fi
 done
 
+dephy_path=$(json_value '.deps.dephy.path')
+dephy_profile=$(json_value '.deps.dephy.profile')
+if [ -n "$dephy_path" ]; then
+    if [ -z "$dephy_profile" ]; then
+        dephy_profile=esp32
+    fi
+    dephy_sync="$ROOT_DIR/$dephy_path/boards/$dephy_profile/scripts/sync_zephyr_modules.sh"
+    if [ -x "$dephy_sync" ]; then
+        "$dephy_sync"
+    else
+        printf 'warning: Dephy sync script not found: %s\n' "$dephy_sync" >&2
+    fi
+fi

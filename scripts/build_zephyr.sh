@@ -10,9 +10,9 @@ if command -v jq >/dev/null 2>&1; then
     DEPHY_WORKSPACE=$(jq -r '.build.dephy_workspace // empty' "$DEPS_JSON")
     EXTRA_MODULES=$(jq -r '.deps | to_entries | map(.value.module_path // .value.path) | join(";")' "$DEPS_JSON")
 else
-    BOARD=esp32
+    BOARD=esp32_devkitc/esp32/procpu
     DEPHY_PATH=deps/dephy
-    DEPHY_WORKSPACE=../dephy/zephyrproject
+    DEPHY_WORKSPACE=deps/dephy/zephyrproject
     EXTRA_MODULES="deps/dephy/boards/esp32;deps/mqtt_min_broker"
 fi
 
@@ -20,7 +20,12 @@ EXTRA_MODULES_ABS="$ROOT_DIR"
 OLD_IFS=$IFS
 IFS=';'
 for module_path in $EXTRA_MODULES; do
-    EXTRA_MODULES_ABS="$EXTRA_MODULES_ABS;$ROOT_DIR/$module_path"
+    module_abs="$ROOT_DIR/$module_path"
+    if [ -f "$module_abs/zephyr/module.yml" ]; then
+        EXTRA_MODULES_ABS="$EXTRA_MODULES_ABS;$module_abs"
+    else
+        printf 'skip non-Zephyr dependency module path: %s\n' "$module_path" >&2
+    fi
 done
 IFS=$OLD_IFS
 
