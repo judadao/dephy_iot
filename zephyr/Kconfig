@@ -24,8 +24,16 @@ config DEPHY_IOT_MQTT_MIN_BROKER
 config DEPHY_IOT_MODBUS
 	bool "Enable Modbus adapter"
 	default n
+	imply MODBUS_ZEPHYR_ESP32
 	help
-	  Reserve and compile the Modbus adapter API.
+	  Enable the Modbus adapter API.
+
+config DEPHY_IOT_MODBUS_ZEPHYR_ESP32
+	bool "Back Modbus adapter with modbus_zephyr_esp32"
+	depends on DEPHY_IOT_MODBUS
+	default y
+	help
+	  Use the modbus_zephyr_esp32 dependency as the Modbus backend.
 
 config DEPHY_IOT_SNMP
 	bool "Enable SNMP adapter"

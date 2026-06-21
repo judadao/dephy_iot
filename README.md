@@ -6,7 +6,7 @@ This repository is intended to collect protocol modules behind one small public
 API while keeping each protocol independently enabled:
 
 - MQTT through `mqtt_min_broker`
-- Modbus through `modbus_zephyr_esp32`, planned
+- Modbus through `modbus_zephyr_esp32`
 - SNMP, planned
 
 It supports two build modes:

@@ -18,14 +18,18 @@ LDFLAGS += -lpthread
 endif
 
 ifdef MODBUS
-CFLAGS += -DCONFIG_DEPHY_IOT_MODBUS
+CFLAGS += -DCONFIG_DEPHY_IOT_MODBUS \
+          -DCONFIG_DEPHY_IOT_MODBUS_ZEPHYR_ESP32 \
+          -DCONFIG_MODBUS_ZEPHYR_ESP32 \
+          -Ideps/modbus_zephyr_esp32/include
+MODBUS_SRCS = deps/modbus_zephyr_esp32/src/modbus.c
 endif
 
 ifdef SNMP
 CFLAGS += -DCONFIG_DEPHY_IOT_SNMP
 endif
 
-SRCS = src/iot.c src/mqtt.c src/modbus.c src/snmp.c $(MQTT_SRCS)
+SRCS = src/iot.c src/mqtt.c src/modbus.c src/snmp.c $(MQTT_SRCS) $(MODBUS_SRCS)
 OBJS = $(SRCS:%.c=$(OUTDIR)/%.o)
 LIB  = $(OUTDIR)/libdephy_iot.a
 UNIT = $(OUTDIR)/unit_iot
@@ -35,7 +39,10 @@ UNIT = $(OUTDIR)/unit_iot
 all: $(LIB)
 
 $(OUTDIR):
-	mkdir -p $(OUTDIR)/src $(OUTDIR)/deps/mqtt_min_broker/src $(OUTDIR)/deps/mqtt_min_broker/platform/posix
+	mkdir -p $(OUTDIR)/src \
+	    $(OUTDIR)/deps/mqtt_min_broker/src \
+	    $(OUTDIR)/deps/mqtt_min_broker/platform/posix \
+	    $(OUTDIR)/deps/modbus_zephyr_esp32/src
 
 $(OUTDIR)/%.o: %.c | $(OUTDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
