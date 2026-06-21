@@ -19,7 +19,7 @@
       "repo": "git@github.com:judadao/modbus_zephyr_esp32.git",
       "local": "../modbus_zephyr_esp32",
       "path": "deps/modbus_zephyr_esp32",
-      "optional": true,
+      "version": "modbus-v0.1.0",
       "module_path": "deps/modbus_zephyr_esp32"
     }
   },

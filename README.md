@@ -79,6 +79,5 @@ The default board is read from `deps.json` and is currently
 - `build.dephy_workspace`: local Zephyr workspace, currently
   `deps/dephy/zephyrproject`
 
-`modbus_zephyr_esp32` is already declared as an optional dependency. Its remote
-repository is currently empty, so `scripts/build_zephyr.sh` skips it until it
-contains Zephyr module metadata such as `zephyr/module.yml`.
+`modbus_zephyr_esp32` is declared as a pinned dependency and is materialized
+under `deps/modbus_zephyr_esp32`.
