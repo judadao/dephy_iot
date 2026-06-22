@@ -1,7 +1,7 @@
 {
   "repo_type": "module",
   "name": "dephy_iot",
-  "description": "Reusable IoT protocol adapter boundaries for MQTT, Modbus, and SNMP in Dephy/Zephyr projects.",
+  "description": "Reusable IoT protocol adapter layer for Dephy systems, defining MQTT, Modbus, and SNMP boundaries for Linux and Zephyr products.",
   "module_kind": "iot_protocol_adapters",
   "product_dependency_allowed": true,
   "dependency_policy": "deps.json may reference reusable module repos only; do not depend on product repos",
@@ -14,6 +14,8 @@
     "mqtt",
     "modbus",
     "snmp",
-    "zephyr"
+    "zephyr",
+    "protocol-adapter",
+    "embedded-c"
   ]
 }
