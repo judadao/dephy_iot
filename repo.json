@@ -1,8 +1,19 @@
 {
   "repo_type": "module",
   "name": "dephy_iot",
+  "description": "Reusable IoT protocol adapter boundaries for MQTT, Modbus, and SNMP in Dephy/Zephyr projects.",
   "module_kind": "iot_protocol_adapters",
   "product_dependency_allowed": true,
   "dependency_policy": "deps.json may reference reusable module repos only; do not depend on product repos",
-  "deps_dir": "deps"
+  "deps_dir": "deps",
+  "license": "MIT",
+  "attribution_notice": "Copyright notice and attribution to Judd (judadao) must be preserved.",
+  "topics": [
+    "dephy",
+    "iot",
+    "mqtt",
+    "modbus",
+    "snmp",
+    "zephyr"
+  ]
 }
