@@ -1,0 +1,37 @@
+version: 1
+policy:
+  source_of_truth: docs/todo.yaml
+  rules:
+  - Use dephy_todo as the global TODO entry point.
+  - Before starting work, add or update the relevant TODO item.
+  - When behavior changes, update TODO status in the same change.
+  - Keep docs/todo.md as a human-readable summary generated from this file.
+items:
+- id: todo-yaml-source
+  area: repo
+  title: Add docs/todo.yaml so dephy_iot is tracked globally.
+  status: done
+- id: repo-identity-audit
+  area: repo
+  title: Decide whether dephy_iot is a reusable module or product and update repo.json and docs consistently.
+  status: todo
+- id: align-golden-sample
+  area: repo
+  title: Align layout, docs, tests, and Zephyr metadata with the applicable golden sample.
+  status: todo
+- id: protocol-boundary-doc
+  area: architecture
+  title: Document ownership boundaries between dephy_iot, dephy_industrial_io, and modbus_zephyr_esp32.
+  status: todo
+- id: deps-sync-validation
+  area: validation
+  title: Add dependency sync validation that rejects product-to-product dependencies.
+  status: todo
+- id: mqtt-buffer-sizing
+  area: performance
+  title: Review MQTT buffer sizes and add coverage for payload truncation or bounded formatting behavior.
+  status: todo
+- id: modbus-parser-coverage
+  area: validation
+  title: Add focused unit coverage for Modbus frame parsing, bad CRC, timeout, and exception responses.
+  status: todo
