@@ -2,18 +2,53 @@
 
 Reusable IoT protocol adapter module for Dephy and Zephyr projects.
 
-This repo provides a small protocol coordination layer for MQTT, Modbus, and
-SNMP adapter boundaries. Product-specific provisioning and workflows belong in
-product repos; reusable protocol glue belongs here.
+`dephy_iot` is the protocol coordination layer. It keeps MQTT, Modbus, and SNMP
+adapter boundaries reusable so product repos can choose which protocols to
+enable without copying protocol glue into product code.
 
-## Current Capabilities
+## Why This Exists
 
-- Protocol enable/start dispatch through `include/dephy_iot/iot.h`.
-- MQTT adapter config and bounded topic formatting.
-- Modbus adapter config, CRC16 helper, and RTU response parser.
-- SNMP adapter placeholder boundary.
-- Dependency policy check that rejects product-to-product dependencies.
-- Zephyr module metadata smoke test.
+- Products need consistent protocol startup and configuration rules.
+- MQTT topic formatting, Modbus parsing, and SNMP boundaries should be shared.
+- Protocol adapters should be testable on Linux and buildable as Zephyr modules.
+- Product-specific provisioning stays in product repos; reusable protocol logic
+  stays here.
+
+## Normal Flow
+
+1. Pin this module in a product `deps.json`.
+2. Sync it into the product `deps/` directory.
+3. Enable only the protocol features the product needs.
+4. Fill the adapter configs from product configuration or provisioning.
+5. Start the selected protocol adapters through the public API.
+
+Linux feature flags:
+
+```sh
+make -f Makefile.linux MQTT=1
+make -f Makefile.linux MODBUS=1
+make -f Makefile.linux SNMP=1
+```
+
+Zephyr configuration:
+
+```conf
+CONFIG_DEPHY_IOT=y
+CONFIG_DEPHY_IOT_MQTT=y
+CONFIG_DEPHY_IOT_MODBUS=y
+CONFIG_DEPHY_IOT_SNMP=n
+```
+
+## How It Works
+
+The module exposes small, bounded adapter APIs. MQTT helpers format topics and
+hold broker connection settings. Modbus helpers validate config, compute CRC16,
+and parse RTU responses. SNMP currently provides a placeholder boundary so the
+dependency and build shape are ready before a full implementation lands.
+
+A dependency policy check rejects product-to-product dependencies. Reusable
+modules may depend on other reusable modules, but a product app should not
+become a dependency of another product.
 
 ## Layout
 
@@ -35,30 +70,6 @@ make -f Makefile.linux test
 ./scripts/sync_deps.sh
 ./scripts/build_zephyr.sh
 ```
-
-Optional Linux feature flags:
-
-```sh
-make -f Makefile.linux MQTT=1
-make -f Makefile.linux MODBUS=1
-make -f Makefile.linux SNMP=1
-```
-
-## Zephyr
-
-Add this repo to `ZEPHYR_EXTRA_MODULES`, then enable the protocol options:
-
-```conf
-CONFIG_DEPHY_IOT=y
-CONFIG_DEPHY_IOT_MQTT=y
-CONFIG_DEPHY_IOT_MODBUS=y
-CONFIG_DEPHY_IOT_SNMP=n
-```
-
-## Dependency Boundary
-
-Allowed dependencies are reusable modules such as `dephy`, `mqtt_min_broker`,
-and `modbus_zephyr_esp32`. Product repositories must not be dependencies.
 
 ## TODO
 
