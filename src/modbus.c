@@ -45,3 +45,57 @@ int dephy_iot_modbus_start(void)
     return DEPHY_IOT_ERR_NOT_ENABLED;
 #endif
 }
+
+unsigned short dephy_iot_modbus_crc16(const unsigned char *data,
+                                      unsigned int len)
+{
+    unsigned short crc = 0xffffu;
+    unsigned int i;
+    unsigned int bit;
+
+    if (data == 0 && len != 0u) {
+        return 0u;
+    }
+
+    for (i = 0; i < len; ++i) {
+        crc ^= data[i];
+        for (bit = 0; bit < 8u; ++bit) {
+            if ((crc & 0x0001u) != 0u) {
+                crc = (unsigned short)((crc >> 1) ^ 0xa001u);
+            } else {
+                crc = (unsigned short)(crc >> 1);
+            }
+        }
+    }
+
+    return crc;
+}
+
+int dephy_iot_modbus_parse_rtu_response(const unsigned char *frame,
+                                        unsigned int len,
+                                        struct dephy_iot_modbus_response *out)
+{
+    unsigned short expected_crc;
+    unsigned short actual_crc;
+
+    if (frame == 0 || out == 0 || len < 5u) {
+        return DEPHY_IOT_ERR_INVALID_ARG;
+    }
+
+    expected_crc = dephy_iot_modbus_crc16(frame, len - 2u);
+    actual_crc = (unsigned short)(frame[len - 2u] | ((unsigned short)frame[len - 1u] << 8));
+    if (expected_crc != actual_crc) {
+        return DEPHY_IOT_ERR_INVALID_ARG;
+    }
+
+    out->unit_id = frame[0];
+    out->function = frame[1];
+    out->payload = &frame[2];
+    out->payload_len = len - 4u;
+
+    if ((out->function & 0x80u) != 0u) {
+        return DEPHY_IOT_ERR_UNSUPPORTED;
+    }
+
+    return DEPHY_IOT_OK;
+}

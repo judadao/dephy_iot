@@ -34,7 +34,7 @@ OBJS = $(SRCS:%.c=$(OUTDIR)/%.o)
 LIB  = $(OUTDIR)/libdephy_iot.a
 UNIT = $(OUTDIR)/unit_iot
 
-.PHONY: all clean test unit-tests
+.PHONY: all clean test unit-tests deps-policy zephyr-smoke
 
 all: $(LIB)
 
@@ -54,7 +54,13 @@ unit-tests: $(LIB)
 	$(CC) $(CFLAGS) tests/unit_iot.c $(SRCS) -DCONFIG_DEPHY_IOT_MQTT -o $(UNIT) $(LDFLAGS)
 	$(UNIT)
 
-test: unit-tests
+deps-policy:
+	./scripts/test_deps_policy.sh
+
+zephyr-smoke:
+	./scripts/test_zephyr_module.sh
+
+test: unit-tests deps-policy zephyr-smoke
 
 clean:
 	rm -rf $(OUTDIR)

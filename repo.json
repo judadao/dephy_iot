@@ -1,7 +1,8 @@
 {
-  "repo_type": "product",
+  "repo_type": "module",
   "name": "dephy_iot",
+  "module_kind": "iot_protocol_adapters",
+  "product_dependency_allowed": true,
   "dependency_policy": "deps.json may reference reusable module repos only; do not depend on product repos",
   "deps_dir": "deps"
 }
-
