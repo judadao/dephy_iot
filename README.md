@@ -1,44 +1,44 @@
 # dephy_iot
 
-Reusable IoT protocol adapters for Dephy and Zephyr projects.
+Reusable IoT protocol adapter module for Dephy and Zephyr projects.
 
-This repository is intended to collect protocol modules behind one small public
-API while keeping each protocol independently enabled:
+This repo provides a small protocol coordination layer for MQTT, Modbus, and
+SNMP adapter boundaries. Product-specific provisioning and workflows belong in
+product repos; reusable protocol glue belongs here.
 
-- MQTT through `mqtt_min_broker`
-- Modbus through `modbus_zephyr_esp32`
-- SNMP, planned
+## Current Capabilities
 
-It supports two build modes:
-
-1. **Linux development build** with `Makefile.linux` for fast compile and unit
-   testing.
-2. **Zephyr module build** with standard `ZEPHYR_EXTRA_MODULES`, plus helper
-   scripts that build through the Dephy-managed Zephyr workspace.
+- Protocol enable/start dispatch through `include/dephy_iot/iot.h`.
+- MQTT adapter config and bounded topic formatting.
+- Modbus adapter config, CRC16 helper, and RTU response parser.
+- SNMP adapter placeholder boundary.
+- Dependency policy check that rejects product-to-product dependencies.
+- Zephyr module metadata smoke test.
 
 ## Layout
 
 ```text
-dephy_iot/
-├── include/dephy_iot/     # public module APIs
-├── src/                   # portable protocol adapter implementation
-├── zephyr/                # Zephyr module metadata, CMake, Kconfig
-├── tests/                 # Linux unit tests
-├── scripts/               # dependency sync and Dephy-led build helpers
-├── deps.json              # local and remote dependency pins
-└── Makefile.linux         # Linux development build
+include/dephy_iot/   public headers
+src/                 portable protocol adapter implementation
+scripts/             deps policy, Zephyr smoke, sync/build helpers
+tests/               Linux unit tests
+zephyr/              Zephyr module metadata
+deps.json            pinned reusable dependencies
+repo.json            repo_type: module
 ```
 
-## Linux
+## Commands
 
-```bash
+```sh
 make -f Makefile.linux
 make -f Makefile.linux test
+./scripts/sync_deps.sh
+./scripts/build_zephyr.sh
 ```
 
-Build flags:
+Optional Linux feature flags:
 
-```bash
+```sh
 make -f Makefile.linux MQTT=1
 make -f Makefile.linux MODBUS=1
 make -f Makefile.linux SNMP=1
@@ -46,44 +46,20 @@ make -f Makefile.linux SNMP=1
 
 ## Zephyr
 
-As a normal Zephyr module, add this repository to `ZEPHYR_EXTRA_MODULES` and
-enable the protocol options you need:
+Add this repo to `ZEPHYR_EXTRA_MODULES`, then enable the protocol options:
 
-```text
+```conf
 CONFIG_DEPHY_IOT=y
 CONFIG_DEPHY_IOT_MQTT=y
-CONFIG_DEPHY_IOT_MODBUS=n
+CONFIG_DEPHY_IOT_MODBUS=y
 CONFIG_DEPHY_IOT_SNMP=n
 ```
 
-For Dephy-led builds, sync the pinned dependencies and build the sample app.
-Dependencies are materialized into `deps/`; build scripts consume dependency
-source, headers, Zephyr CMake metadata, and the Dephy-managed Zephyr workspace
-from that directory:
+## Dependency Boundary
 
-```bash
-./scripts/sync_deps.sh
-./scripts/build_zephyr.sh
-```
+Allowed dependencies are reusable modules such as `dephy`, `mqtt_min_broker`,
+and `modbus_zephyr_esp32`. Product repositories must not be dependencies.
 
-The first `sync_deps.sh` run initializes `deps/dephy/zephyrproject` and downloads
-the configured Zephyr modules. Later runs preserve that workspace and skip
-module downloads unless Dephy is forced with `DEPHY_FORCE_WEST_UPDATE=1`.
-Use `DEPHY_IOT_SKIP_INIT=1 ./scripts/sync_deps.sh` when you only want to update
-dependency checkouts and skip Dephy init entirely.
+## TODO
 
-The default board is read from `deps.json` and is currently
-`esp32_devkitc/esp32/procpu`.
-
-`deps.json` separates the Dephy profile from the Zephyr target:
-
-- `deps.dephy.profile`: Dephy profile directory, currently `esp32`
-- `deps.dephy.module_path`: Zephyr module path, currently
-  `deps/dephy/boards/esp32`
-- `build.board`: Zephyr target passed to `west build`, currently
-  `esp32_devkitc/esp32/procpu`
-- `build.dephy_workspace`: local Zephyr workspace, currently
-  `deps/dephy/zephyrproject`
-
-`modbus_zephyr_esp32` is declared as a pinned dependency and is materialized
-under `deps/modbus_zephyr_esp32`.
+TODO state is tracked in `docs/todo.yaml` and summarized in `docs/todo.md`.
