@@ -6,7 +6,13 @@ Reusable IoT protocol adapter module for Dephy and Zephyr projects.
 adapter boundaries reusable so product repos can choose which protocols to
 enable without copying protocol glue into product code.
 
-## Why This Exists
+## Overview
+
+Use this repo when a product needs protocol adapters but should not own protocol
+implementation details. It provides the common startup/configuration boundary
+for IoT protocols and leaves product-specific provisioning in the product repo.
+
+## Key Value
 
 - Products need consistent protocol startup and configuration rules.
 - MQTT topic formatting, Modbus parsing, and SNMP boundaries should be shared.
@@ -14,7 +20,7 @@ enable without copying protocol glue into product code.
 - Product-specific provisioning stays in product repos; reusable protocol logic
   stays here.
 
-## Normal Flow
+## How To Use
 
 1. Pin this module in a product `deps.json`.
 2. Sync it into the product `deps/` directory.
