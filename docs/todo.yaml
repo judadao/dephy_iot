@@ -13,15 +13,18 @@ items:
   status: done
 - id: repo-identity-audit
   area: repo
-  title: Decide whether dephy_iot is a reusable module or product and update repo.json and docs consistently.
+  title: Decide whether dephy_iot is a reusable module or product and update repo.json
+    and docs consistently.
   status: todo
 - id: align-golden-sample
   area: repo
-  title: Align layout, docs, tests, and Zephyr metadata with the applicable golden sample.
+  title: Align layout, docs, tests, and Zephyr metadata with the applicable golden
+    sample.
   status: todo
 - id: protocol-boundary-doc
   area: architecture
-  title: Document ownership boundaries between dephy_iot, dephy_industrial_io, and modbus_zephyr_esp32.
+  title: Document ownership boundaries between dephy_iot, dephy_industrial_io, and
+    modbus_zephyr_esp32.
   status: todo
 - id: deps-sync-validation
   area: validation
@@ -29,9 +32,16 @@ items:
   status: todo
 - id: mqtt-buffer-sizing
   area: performance
-  title: Review MQTT buffer sizes and add coverage for payload truncation or bounded formatting behavior.
+  title: Review MQTT buffer sizes and add coverage for payload truncation or bounded
+    formatting behavior.
   status: todo
 - id: modbus-parser-coverage
   area: validation
-  title: Add focused unit coverage for Modbus frame parsing, bad CRC, timeout, and exception responses.
+  title: Add focused unit coverage for Modbus frame parsing, bad CRC, timeout, and
+    exception responses.
+  status: todo
+- id: pass-golden-structure-audit
+  area: repo
+  title: Refactor repository identity and layout until the applicable golden structure
+    audit passes.
   status: todo

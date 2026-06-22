@@ -7,6 +7,7 @@ Source of truth: `docs/todo.yaml`. Update YAML before starting or completing wor
 - [x] Add docs/todo.yaml so dephy_iot is tracked globally.
 - [ ] Decide whether dephy_iot is a reusable module or product and update repo.json and docs consistently.
 - [ ] Align layout, docs, tests, and Zephyr metadata with the applicable golden sample.
+- [ ] Refactor repository identity and layout until the applicable golden structure audit passes.
 
 ## architecture
 
