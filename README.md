@@ -60,6 +60,21 @@ flowchart TD
 Products choose protocols and provide settings. `dephy_iot` keeps adapter
 startup and protocol glue reusable.
 
+## Systematic Regression Testing
+
+From the workspace root, run the shared pytest regression module:
+
+```sh
+../dephy_testkit/.venv/bin/python -m pytest ../dephy_testkit/tests/regression --module dephy_iot
+../dephy_testkit/.venv/bin/python -m pytest ../dephy_testkit/tests/regression --module dephy_iot --profile integration
+```
+
+The local repo test remains:
+
+```sh
+make -f Makefile.linux test
+```
+
 ## Docs
 
 - `docs/module_structure.md`: adapter layout and dependency boundary.
